@@ -1,0 +1,27 @@
+{
+ "name": "Nafasi Nairobi",
+ "short_name": "Nafasi",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "background_color": "#ECEFF2",
+ "theme_color": "#14202E",
+ "icons": [
+  {
+   "src": "nafasi-icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "nafasi-icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "nafasi-icon-maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}
