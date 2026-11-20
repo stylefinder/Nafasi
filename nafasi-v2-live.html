@@ -1,0 +1,898 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14202E">
+<meta name="description" content="Flats, shops and offices for rent in Nairobi, with the manager's contact on every listing.">
+<link rel="manifest" href="nafasi-manifest.webmanifest">
+<link rel="icon" href="nafasi-icon-192.png">
+<link rel="apple-touch-icon" href="nafasi-icon-192.png">
+<title>Nafasi Nairobi</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@600;700&display=swap">
+<style>
+/* Layout: a notice board. Signboard header, one column of listing cards, trust facts (landlord consent, lease) set ahead of photos. */
+:root {
+  --bg: #ECEFF2;
+  --surface: #FFFFFF;
+  --ink: #14202E;
+  --muted: #566475;
+  --line: #D3D9E0;
+  --chip: #E3E8EE;
+  --brand: #1D3D63;
+  --brand-ink: #F3F6FA;
+  --sign: #F2B705;
+  --sign-ink: #14202E;
+  --good: #1B7A4B;
+  --good-bg: #DDF1E6;
+  --warn: #8A4F06;
+  --warn-bg: #FBEBCB;
+  --bad: #B3322B;
+  --bad-bg: #F9DEDB;
+  --focus: #1D5FD0;
+  --font-display: 'Barlow Condensed', 'Arial Narrow', Arial, sans-serif;
+  --font-body: 'Barlow', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E151E; --surface: #16202C; --ink: #E7ECF2; --muted: #93A2B4; --line: #263445; --chip: #1F2C3B;
+    --brand: #13233A; --brand-ink: #EAF0F7; --sign: #F2B705; --sign-ink: #14202E;
+    --good: #5FCB93; --good-bg: #14382A; --warn: #F0B45A; --warn-bg: #3A2A0E; --bad: #F08A82; --bad-bg: #3F1B18;
+    --focus: #7FB0FF; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E151E; --surface: #16202C; --ink: #E7ECF2; --muted: #93A2B4; --line: #263445; --chip: #1F2C3B;
+  --brand: #13233A; --brand-ink: #EAF0F7; --sign: #F2B705; --sign-ink: #14202E;
+  --good: #5FCB93; --good-bg: #14382A; --warn: #F0B45A; --warn-bg: #3A2A0E; --bad: #F08A82; --bad-bg: #3F1B18;
+  --focus: #7FB0FF; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.45; }
+h1, h2, h3, p { margin: 0; }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.wrap { max-width: 760px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* header */
+.top { background: var(--brand); color: var(--brand-ink); padding-block: 22px 24px; }
+.top .wrap { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+.sign { display: inline-block; background: var(--sign); color: var(--sign-ink); border: 2px solid var(--sign-ink); font-family: var(--font-display); font-weight: 700; font-size: 18px; letter-spacing: .14em; padding: 1px 10px 0; text-transform: uppercase; transform: rotate(-1.5deg); }
+.top h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(38px, 11vw, 58px); line-height: .95; letter-spacing: .01em; text-transform: uppercase; text-wrap: balance; }
+.top p { max-width: 46ch; opacity: .9; }
+.btn { min-height: 44px; padding: 8px 18px; border: 2px solid var(--ink); background: var(--surface); border-radius: 4px; cursor: pointer; font-weight: 600; }
+.btn:disabled { opacity: .55; cursor: not-allowed; }
+.btn-sign { background: var(--sign); color: var(--sign-ink); border-color: var(--sign-ink); font-family: var(--font-display); font-weight: 700; font-size: 20px; letter-spacing: .08em; text-transform: uppercase; }
+.btn-quiet { border-color: var(--line); background: transparent; min-height: 40px; padding: 6px 12px; font-size: 14px; }
+.btn-danger { border-color: var(--bad); color: var(--bad); background: transparent; min-height: 40px; padding: 6px 12px; font-size: 14px; }
+.top-note { font-size: 14px; opacity: .85; }
+
+/* body */
+main.wrap { display: flex; flex-direction: column; gap: 16px; padding-block: 18px 40px; }
+.safety { background: var(--warn-bg); color: var(--warn); border: 1px solid var(--warn); border-radius: 4px; padding: 10px 12px; font-size: 14px; }
+.safety strong { font-weight: 600; }
+.tools { display: flex; flex-direction: column; gap: 10px; }
+.field-label { display: block; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+input[type="text"], input[type="search"], select, textarea { width: 100%; min-height: 44px; padding: 8px 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; }
+textarea { min-height: 84px; resize: vertical; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { min-height: 40px; padding: 4px 14px; background: var(--chip); border: 1px solid transparent; border-radius: 4px; cursor: pointer; font-weight: 500; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.row2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; }
+.meta { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.meta label { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; }
+
+/* listing cards */
+#list { display: flex; flex-direction: column; gap: 14px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; display: flex; flex-direction: column; min-width: 0; }
+.card.is-taken { opacity: .6; }
+.photos { display: grid; grid-template-columns: 1fr; gap: 2px; }
+.photos.two { grid-template-columns: 1fr 1fr; }
+.photos img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 4px 4px 0 0; background: var(--chip); }
+.photos.two img:last-child { border-top-right-radius: 4px; }
+.card-body { padding: 14px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.tag { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; padding: 2px 8px; border-radius: 2px; background: var(--chip); }
+.tag.plate { background: var(--sign); color: var(--sign-ink); }
+.tag.good { background: var(--good-bg); color: var(--good); }
+.tag.warn { background: var(--warn-bg); color: var(--warn); }
+.tag.bad { background: var(--bad-bg); color: var(--bad); }
+.card h2 { font-family: var(--font-display); font-weight: 700; font-size: 26px; line-height: 1.05; overflow-wrap: anywhere; text-wrap: balance; }
+.prices { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding-block: 10px; border-block: 1px dashed var(--line); }
+.price b { display: block; font-family: var(--font-display); font-weight: 700; font-size: 30px; line-height: 1; font-variant-numeric: tabular-nums; }
+.price span { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.facts { display: flex; flex-wrap: wrap; gap: 4px 16px; color: var(--muted); font-size: 14px; }
+.notes { overflow-wrap: anywhere; }
+.warning { background: var(--bad-bg); color: var(--bad); border: 1px solid var(--bad); border-radius: 4px; padding: 10px 12px; font-weight: 600; font-size: 14px; overflow-wrap: anywhere; }
+.age { font-size: 13px; color: var(--muted); }
+.age.stale { color: var(--warn); font-weight: 500; }
+.contact { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.wa { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 8px 16px; border-radius: 4px; background: var(--good); color: var(--bg); text-decoration: none; font-weight: 600; }
+.phone { font-variant-numeric: tabular-nums; font-weight: 500; user-select: all; }
+.seller { color: var(--muted); font-size: 14px; }
+.actions { display: flex; flex-wrap: wrap; gap: 6px; padding-top: 10px; border-top: 1px solid var(--line); align-items: center; }
+.reasons { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 14px; }
+.admin-line { font-size: 13px; color: var(--bad); }
+
+/* notices, form */
+.notice { background: var(--surface); border: 1px dashed var(--line); border-radius: 4px; padding: 22px 16px; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.notice h2 { font-family: var(--font-display); font-weight: 700; font-size: 26px; text-transform: uppercase; }
+.notice p { color: var(--muted); max-width: 52ch; }
+.panel { background: var(--surface); border: 2px solid var(--ink); border-radius: 4px; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+.panel h2 { font-family: var(--font-display); font-weight: 700; font-size: 28px; text-transform: uppercase; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+.grid > div { min-width: 0; }
+.check { display: flex; gap: 10px; align-items: flex-start; min-height: 44px; }
+.check input { width: 22px; height: 22px; margin-top: 2px; flex: none; }
+.hint { font-size: 13px; color: var(--muted); margin-top: 4px; }
+.form-error { color: var(--bad); font-weight: 500; min-height: 1.4em; }
+.previews { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.previews div { position: relative; width: 96px; }
+.previews img { width: 96px; height: 72px; object-fit: cover; border-radius: 4px; display: block; }
+.previews button { width: 100%; margin-top: 4px; }
+.form-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+footer { font-size: 13px; color: var(--muted); }
+#toast { position: fixed; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 4px; font-weight: 500; max-width: calc(100% - 32px); opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 20; }
+#toast.show { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { #toast { transition: none; } }
+</style>
+<style>
+.prices.one { grid-template-columns: 1fr; }
+.photos.three img:first-child { grid-column: 1 / -1; }
+.photos.three, .photos.four { grid-template-columns: 1fr 1fr; }
+.photos img { border-radius: 0; }
+.photos > img:first-child { border-top-left-radius: 4px; }
+.photos > img:nth-child(2) { border-top-right-radius: 4px; }
+.photos.three > img:first-child { border-top-right-radius: 4px; }
+footer a, footer button.link { color: inherit; text-decoration: underline; background: none; border: 0; padding: 8px 0; cursor: pointer; font-size: 13px; }
+.top-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+[hidden] { display: none !important; }
+.ok-note { color: var(--good); font-weight: 500; }
+</style>
+<style>
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.tab { min-height: 44px; padding: 6px 16px; background: var(--chip); border: 1px solid transparent; border-radius: 4px; cursor: pointer; font-weight: 600; }
+.tab[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.tabs.sub .tab { min-height: 40px; font-weight: 500; }
+input[type="password"], input[type="email"] { width: 100%; min-height: 44px; padding: 8px 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; }
+.auth-links { display: flex; flex-wrap: wrap; gap: 4px 18px; margin-top: 6px; }
+.auth-links .link, button.link { background: none; border: 0; padding: 10px 0; cursor: pointer; text-decoration: underline; color: var(--brand); font-size: 14px; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .auth-links .link { color: var(--ink); } }
+.call { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 8px 16px; border-radius: 4px; border: 2px solid var(--ink); color: var(--ink); text-decoration: none; font-weight: 600; }
+.owner-line { font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
+.urow { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; }
+.urow b { font-size: 17px; }
+.urow .sub { font-size: 14px; color: var(--muted); overflow-wrap: anywhere; }
+.section-head { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+.section-head p { color: var(--muted); font-size: 14px; }
+</style>
+<style>
+.top .btn:not(.btn-sign) { color: var(--ink); }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <span class="sign">For rent or transfer</span>
+    <h1>Nafasi Nairobi</h1>
+    <p>Flats, shops and offices you can rent or take over in Nairobi, with the manager's contact on every listing.</p>
+    <div class="top-actions">
+      <button class="btn btn-sign" id="openPost" type="button" hidden>Post a vacancy</button>
+      <button class="btn btn-sign" id="btnSignup" type="button">Post your vacancy</button>
+      <button class="btn" id="btnLogin" type="button">Log in</button>
+      <button class="btn" id="signOut" type="button" hidden>Log out</button>
+    </div>
+    <p class="top-note" id="adminNote" hidden></p>
+  </div>
+</header>
+
+<main class="wrap">
+  <p class="safety"><strong>Before you pay anything:</strong> view the space in person. Do not pay cash to anyone. For shops and stalls, ask to see the lease or a rent receipt and confirm the landlord agrees to the transfer. For flats, deal directly with the manager or the landlord.</p>
+
+  <nav class="tabs" id="viewTabs" aria-label="Sections" hidden></nav>
+
+  <section class="panel" id="authPanel" aria-labelledby="authTitle" hidden>
+    <h2 id="authTitle">Log in</h2>
+    <p class="hint" id="authIntro"></p>
+    <form id="authForm" novalidate>
+      <div class="grid">
+        <div id="a-name-wrap" style="grid-column:1/-1" hidden><label class="field-label" for="a-name">Your name</label><input type="text" id="a-name" maxlength="60" autocomplete="name"></div>
+        <div id="a-phone-wrap" style="grid-column:1/-1" hidden><label class="field-label" for="a-phone">Phone number</label><input type="text" id="a-phone" inputmode="tel" placeholder="0712 345 678" autocomplete="tel"></div>
+        <div id="a-email-wrap" style="grid-column:1/-1"><label class="field-label" for="a-email">Email</label><input type="text" id="a-email" inputmode="email" autocomplete="email" autocapitalize="none"></div>
+        <div id="a-pass-wrap" style="grid-column:1/-1"><label class="field-label" for="a-pass" id="a-pass-label">Password</label><input type="password" id="a-pass" autocomplete="current-password"><p class="hint" id="a-pass-hint" hidden>At least 8 characters.</p></div>
+      </div>
+      <p class="form-error" id="authMsg" role="alert"></p>
+      <div class="form-actions">
+        <button class="btn btn-sign" id="a-submit" type="submit">Log in</button>
+        <button class="btn" id="a-cancel" type="button">Cancel</button>
+      </div>
+      <div class="auth-links">
+        <button class="link" id="a-to-signup" type="button">Create an account</button>
+        <button class="link" id="a-to-login" type="button">I already have an account</button>
+        <button class="link" id="a-to-forgot" type="button">Forgot password?</button>
+        <button class="link" id="a-to-magic" type="button">Email me a login link instead</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="panel" id="postPanel" aria-labelledby="postTitle" hidden>
+    <h2 id="postTitle">Post a vacancy</h2>
+    <p class="hint" id="approveNote">Nafasi checks every new listing before it goes public. This usually takes a short while.</p>
+    <form id="postForm" novalidate>
+      <div class="grid">
+        <div><label class="field-label" for="f-type">Type of property</label><select id="f-type"></select></div>
+        <div><label class="field-label" for="f-ltype">This listing is</label><select id="f-ltype"><option value="rent">For rent</option><option value="sale">For sale</option><option value="lease">For lease</option></select></div>
+        <div style="grid-column:1/-1"><label class="field-label" for="f-building">Property name and location</label><input type="text" id="f-building" maxlength="100" autocomplete="off"><p class="hint">Example: Neptune Flats, Mkongwe Street, Pangani</p></div>
+        <div id="beds-wrap"><label class="field-label" for="f-beds">Bedrooms</label><select id="f-beds"></select></div>
+        <div id="baths-wrap"><label class="field-label" for="f-baths">Bathrooms</label><select id="f-baths"></select></div>
+        <div id="floor-wrap"><label class="field-label" for="f-floor">Floor</label><input type="text" id="f-floor" maxlength="30" placeholder="e.g. 6th floor or Ground floor" autocomplete="off"></div>
+        <div><label class="field-label" for="f-rent" id="f-rent-label">Monthly rent (KES)</label><input type="text" id="f-rent" inputmode="numeric" placeholder="e.g. 25,000" autocomplete="off"></div>
+        <div id="fee-wrap" hidden><label class="field-label" for="f-fee">Transfer fee (KES)</label><input type="text" id="f-fee" inputmode="numeric" placeholder="e.g. 450,000" autocomplete="off"><p class="hint">Use 0 if there is none.</p></div>
+        <div id="size-wrap" hidden><label class="field-label" for="f-size">Size</label><input type="text" id="f-size" maxlength="40" placeholder="e.g. 3 x 4 m or half an acre" autocomplete="off"></div>
+        <div id="biz-wrap" hidden><label class="field-label" for="f-business">Business there now</label><input type="text" id="f-business" maxlength="60" autocomplete="off"></div>
+        <div id="land-wrap" style="grid-column:1/-1" hidden><label class="field-label" for="f-landlord">Has the landlord agreed to the transfer?</label>
+          <select id="f-landlord"><option value="notasked">Not asked yet</option><option value="agreed">Yes, the landlord has agreed</option></select></div>
+        <div id="docs-wrap" style="grid-column:1/-1" class="check" hidden><input type="checkbox" id="f-docs"><label for="f-docs">A lease or recent rent receipt can be shown</label></div>
+        <div style="grid-column:1/-1"><label class="field-label" for="f-notes">Description</label><textarea id="f-notes" maxlength="400"></textarea><p class="hint">Example: Water included. Parking available. Also call Denis, the caretaker, on 0722 541 639.</p></div>
+        <div><label class="field-label" for="f-name">Contact name</label><input type="text" id="f-name" maxlength="40" placeholder="e.g. Mohamed (manager)" autocomplete="off"></div>
+        <div><label class="field-label" for="f-phone">Phone number</label><input type="text" id="f-phone" inputmode="tel" placeholder="0712 345 678" autocomplete="off"></div>
+        <div><label class="field-label" for="f-wa">WhatsApp number</label><input type="text" id="f-wa" inputmode="tel" placeholder="Leave empty if the same" autocomplete="off"></div>
+        <div style="grid-column:1/-1" class="check" id="warn-wrap"><input type="checkbox" id="f-warn" checked><label for="f-warn">Show the "Do not pay cash" warning on this listing</label></div>
+        <div style="grid-column:1/-1"><label class="field-label" for="f-photos">Photos (up to 4)</label><input type="file" id="f-photos" accept="image/*" multiple><div class="previews" id="photoPrev"></div></div>
+      </div>
+      <p class="form-error" id="formError" role="alert"></p>
+      <div class="form-actions">
+        <button class="btn btn-sign" id="f-submit" type="submit">Post vacancy</button>
+        <button class="btn" id="f-cancel" type="button">Cancel</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="tools" id="tools" aria-label="Find a space">
+    <div><label class="field-label" for="q">Search</label><input type="search" id="q" placeholder="Building, street, floor" autocomplete="off"></div>
+    <div class="chips" id="chips" role="group" aria-label="Type of space"></div>
+    <div class="row2">
+      <div><label class="field-label" for="flist">Listing</label><select id="flist"><option value="all">Rent, sale or lease</option><option value="rent">For rent</option><option value="sale">For sale</option><option value="lease">For lease</option></select></div>
+      <div><label class="field-label" for="maxRent">Highest price (KES)</label><input type="text" id="maxRent" inputmode="numeric" placeholder="No limit" autocomplete="off"></div>
+      <div><label class="field-label" for="fbeds">Bedrooms</label><select id="fbeds"></select></div>
+      <div><label class="field-label" for="sort">Sort by</label>
+        <select id="sort"><option value="new">Newest first</option><option value="rent">Lowest price</option><option value="rentdesc">Highest price</option></select></div>
+    </div>
+    <div class="meta"><span id="count" aria-live="polite"></span><label id="takenWrap" hidden><input type="checkbox" id="showTaken"> Show rented or taken spaces</label></div>
+  </section>
+
+  <section id="list" aria-label="Vacancies"></section>
+
+  <footer>Listings are posted by managers, landlords and agents. Nafasi checks each listing before it goes public. Always view a space in person, and never pay cash to anyone.</footer>
+</main>
+<div id="toast" role="status" aria-live="polite"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CFG = { url: 'https://qqtqjbxnesabcoufradz.supabase.co', key: 'sb_publishable_AZn43s_iRMk1D8pIR1HgkQ_DOjzGVSf' };
+  var TABLE = 'nafasi_listings', PROFILES = 'nafasi_profiles', BUCKET = 'nafasi-photos', MAX_PHOTOS = 4;
+  var RES = ['Apartment/Flat', 'House', 'Bedsitter/Studio', 'Apartment', 'Rental house'];
+  var TRANSFER = ['Shop', 'Stall', 'Kiosk', 'Store', 'Office'];
+  var TYPES = ['Apartment/Flat', 'House', 'Bedsitter/Studio', 'Shop', 'Stall', 'Kiosk', 'Office', 'Store', 'Warehouse', 'Commercial building', 'Business premises', 'Land/Plot', 'Other'];
+  var CHIPS = [
+    ['all', 'All', null],
+    ['flat', 'Flats', ['Apartment/Flat', 'Apartment', 'Bedsitter/Studio']],
+    ['house', 'Houses', ['House', 'Rental house']],
+    ['shop', 'Shop', ['Shop']], ['stall', 'Stall', ['Stall']], ['kiosk', 'Kiosk', ['Kiosk']],
+    ['office', 'Office', ['Office']], ['store', 'Store', ['Store']],
+    ['land', 'Land', ['Land/Plot']],
+    ['more', 'Other', ['Warehouse', 'Commercial building', 'Business premises', 'Other']]
+  ];
+  var LTYPES = { rent: 'For rent', sale: 'For sale', lease: 'For lease' };
+  var PRICE_LABEL = { rent: 'Rent per month', sale: 'Selling price', lease: 'Lease price' };
+  var BEDS = [['Bedsitter', 'Bedsitter'], ['One bedroom', '1 bedroom'], ['Two bedroom', '2 bedrooms'], ['Three bedroom', '3+ bedrooms'], ['Four bedroom', '3+ bedrooms'], ['Five bedroom', '3+ bedrooms']];
+  var BEDFILTER = [['all', 'Any size'], ['Bedsitter', 'Bedsitter'], ['1 bedroom', 'One bedroom'], ['2 bedrooms', 'Two bedroom'], ['3+ bedrooms', 'Three or more']];
+  var BATHS = ['', '1', '2', '3', '4', '5 or more'];
+  var WARNING = 'Do not pay cash to anyone. If you decide to rent the flat, ask the caretaker, watchman or manager for the agreement form and the account number where you deposit the rent money.';
+  var $ = function (id) { return document.getElementById(id); };
+  var sb = null;
+  var state = {
+    rows: [], users: [], loaded: false, failed: false,
+    user: null, profile: null, isAdmin: false, ready: false,
+    view: 'browse', adminTab: 'pending', authMode: 'login',
+    filters: { q: '', type: 'all', ltype: 'all', beds: 'all', maxRent: '', sort: 'new', showTaken: false },
+    ui: { confirmDelete: null }, form: { editId: null, existing: [], added: [] }
+  };
+
+  function isRes(t) { return RES.indexOf(t) !== -1; }
+  function isTransfer(t) { return TRANSFER.indexOf(t) !== -1; }
+  function el(tag, attrs) {
+    var n = document.createElement(tag);
+    if (attrs) Object.keys(attrs).forEach(function (k) {
+      var v = attrs[k];
+      if (v === null || v === undefined || v === false) return;
+      if (k === 'class') n.className = v;
+      else if (k === 'text') n.textContent = v;
+      else if (k.slice(0, 2) === 'on') n.addEventListener(k.slice(2), v);
+      else n.setAttribute(k, v === true ? '' : v);
+    });
+    for (var i = 2; i < arguments.length; i++) {
+      var c = arguments[i];
+      (Array.isArray(c) ? c : [c]).forEach(function (x) {
+        if (x === null || x === undefined || x === false) return;
+        n.append(x.nodeType ? x : document.createTextNode(String(x)));
+      });
+    }
+    return n;
+  }
+  function money(n) { return 'KES ' + Number(n).toLocaleString('en-KE'); }
+  function parseMoney(s) { var d = String(s || '').replace(/[^\d]/g, ''); return d === '' ? null : Number(d); }
+  function normPhone(raw) {
+    var d = String(raw || '').replace(/\D/g, '');
+    if (d.indexOf('254') === 0) { /* ok */ }
+    else if (d.charAt(0) === '0') d = '254' + d.slice(1);
+    else if (d.length === 9) d = '254' + d;
+    return /^254[17]\d{8}$/.test(d) ? d : null;
+  }
+  function showPhone(p) { return '0' + p.slice(3, 6) + ' ' + p.slice(6, 9) + ' ' + p.slice(9); }
+  function ageDays(ts) { return Math.max(0, Math.floor((Date.now() - Number(ts || 0)) / 864e5)); }
+  function ageText(days) {
+    if (days === 0) return 'Listed today';
+    if (days === 1) return 'Listed yesterday';
+    if (days < 60) return 'Listed ' + days + ' days ago';
+    return 'Listed about ' + Math.round(days / 30) + ' months ago';
+  }
+  var toastTimer = 0;
+  function toast(msg) {
+    var t = $('toast'); t.textContent = msg; t.classList.add('show');
+    clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.classList.remove('show'); }, 4200);
+  }
+  function errText(e) {
+    var m = e && e.message ? String(e.message) : '';
+    if (/row-level security|permission denied/i.test(m)) return 'You are not allowed to do that. If your account was suspended, contact Nafasi.';
+    return m || 'That did not go through. Check your connection and try again.';
+  }
+  function floorCategory(t) {
+    var s = String(t || '').trim().toLowerCase();
+    if (!s) return '';
+    if (/ground/.test(s)) return 'Ground floor';
+    if (/basement/.test(s)) return 'Basement';
+    if (/^(1st|first|1)\b/.test(s)) return 'First floor';
+    if (/^(2nd|second|2)\b/.test(s)) return 'Second floor';
+    return 'Third floor or higher';
+  }
+  function bedsCategory(label) { for (var i = 0; i < BEDS.length; i++) if (BEDS[i][0] === label) return BEDS[i][1]; return ''; }
+  function bedsLabelFor(d) {
+    if (d.bedsText) return d.bedsText;
+    for (var i = 0; i < BEDS.length; i++) if (BEDS[i][1] === d.beds) return BEDS[i][0];
+    return '';
+  }
+  function validPhoto(p) { return typeof p === 'string' && (p.indexOf('https://') === 0 || p.indexOf('data:image/jpeg;base64,') === 0); }
+
+  function rowToDoc(r) {
+    return { id: r.id, data: {
+      type: r.type, beds: r.beds, bedsText: r.beds_text, floor: r.floor, floorText: r.floor_text,
+      building: r.building, size: r.size, business: r.business, fee: r.fee, rent: r.rent,
+      landlord: r.landlord, docs: r.docs, notes: r.notes, warning: r.warning, seller: r.seller,
+      phone: r.phone, whatsapp: r.whatsapp || '', baths: r.bathrooms || '', ltype: r.listing_type || 'rent',
+      ownerId: r.owner_id || null, approval: r.approval || 'approved',
+      photos: Array.isArray(r.photos) ? r.photos : [], status: r.status,
+      createdAt: Date.parse(r.created_at)
+    } };
+  }
+  function userById(id) { for (var i = 0; i < state.users.length; i++) if (state.users[i].id === id) return state.users[i]; return null; }
+  function mine() { return state.rows.filter(function (l) { return state.user && l.data.ownerId === state.user.id; }); }
+  function pendingCount() { return state.rows.filter(function (l) { return l.data.approval === 'pending'; }).length; }
+  function canPost() { return !!state.user && !(state.profile && state.profile.suspended); }
+
+  /* ---------- filtering ---------- */
+  function chipTypes(key) { for (var i = 0; i < CHIPS.length; i++) if (CHIPS[i][0] === key) return CHIPS[i][2]; return null; }
+  function sortRows(rows, sort) {
+    rows.sort(function (a, b) {
+      if (sort === 'rent') return Number(a.data.rent) - Number(b.data.rent);
+      if (sort === 'rentdesc') return Number(b.data.rent) - Number(a.data.rent);
+      return Number(b.data.createdAt || 0) - Number(a.data.createdAt || 0);
+    });
+    return rows;
+  }
+  function visible() {
+    var f = state.filters, q = f.q.trim().toLowerCase(), max = parseMoney(f.maxRent), ct = chipTypes(f.type);
+    var rows = state.rows.filter(function (l) {
+      var d = l.data;
+      if (d.approval !== 'approved') return false;
+      if (d.status === 'taken' && !(state.isAdmin && f.showTaken)) return false;
+      if (ct && ct.indexOf(d.type) === -1) return false;
+      if (f.ltype !== 'all' && d.ltype !== f.ltype) return false;
+      if (f.beds !== 'all' && d.beds !== f.beds) return false;
+      if (max !== null && Number(d.rent) > max) return false;
+      if (q) {
+        var hay = [d.building, d.floor, d.floorText, d.bedsText, d.size, d.business, d.notes, d.type, d.beds, LTYPES[d.ltype]].join(' ').toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+    return sortRows(rows, f.sort);
+  }
+
+  /* ---------- cards ---------- */
+  function card(l, ctx) {
+    var d = l.data, id = l.id, taken = d.status === 'taken', res = isRes(d.type), transfer = isTransfer(d.type);
+    var days = ageDays(d.createdAt), phone = normPhone(d.phone), wa = normPhone(d.whatsapp) || phone;
+    var photos = (Array.isArray(d.photos) ? d.photos : []).filter(validPhoto).slice(0, MAX_PHOTOS);
+    var isOwner = state.user && d.ownerId === state.user.id;
+    var canEdit = state.isAdmin || (ctx === 'mine' && isOwner);
+    var tags = el('div', { class: 'tags' },
+      el('span', { class: 'tag', text: d.type || 'Space' }),
+      d.ltype && d.ltype !== 'rent' && el('span', { class: 'tag plate', text: LTYPES[d.ltype] || '' }),
+      transfer && (d.landlord === 'agreed'
+        ? el('span', { class: 'tag good', text: 'Landlord agreed' })
+        : el('span', { class: 'tag warn', text: 'Landlord not asked yet' })),
+      transfer && (d.docs
+        ? el('span', { class: 'tag good', text: 'Lease or receipt on offer' })
+        : el('span', { class: 'tag warn', text: 'No lease offered' })),
+      ctx !== 'browse' && d.approval === 'pending' && el('span', { class: 'tag warn', text: 'Waiting for approval' }),
+      ctx !== 'browse' && d.approval === 'approved' && !taken && el('span', { class: 'tag good', text: 'Live' }),
+      ctx !== 'browse' && d.approval === 'rejected' && el('span', { class: 'tag bad', text: 'Not approved' }),
+      taken && el('span', { class: 'tag bad', text: 'Rented or taken' }));
+    var facts = el('div', { class: 'facts' },
+      (d.bedsText || d.beds) && el('span', { text: d.bedsText || d.beds }),
+      d.baths && el('span', { text: d.baths + (d.baths === '1' ? ' bathroom' : ' bathrooms') }),
+      (d.floorText || d.floor) && el('span', { text: d.floorText || d.floor }),
+      d.size && el('span', { text: d.size }),
+      d.business && el('span', { text: 'Now: ' + d.business }));
+    var contact = el('div', { class: 'contact' },
+      wa && el('a', {
+        class: 'wa', target: '_blank', rel: 'noopener noreferrer',
+        href: 'https://wa.me/' + wa + '?text=' + encodeURIComponent('Hello ' + (d.seller || '') + ', I saw your ' + String(d.type || 'space').toLowerCase() + ' at ' + (d.building || '') + ' on Nafasi Nairobi. Is it still available?')
+      }, 'WhatsApp'),
+      phone && el('a', { class: 'call', href: 'tel:+' + phone }, 'Call'),
+      phone && el('span', { class: 'phone', text: showPhone(phone) }),
+      phone && el('button', { class: 'btn btn-quiet', type: 'button', onclick: function () {
+        try { navigator.clipboard.writeText(showPhone(phone)).then(function () { toast('Number copied'); }, function () { toast('Could not copy. The number is on the card.'); }); } catch (e) { toast('Could not copy. The number is on the card.'); }
+      } }, 'Copy'),
+      d.seller && el('span', { class: 'seller', text: d.seller }));
+    var owner = null;
+    if (ctx === 'admin') {
+      var u = userById(d.ownerId);
+      owner = el('p', { class: 'owner-line', text: 'Posted by ' + (u ? [u.full_name || 'No name', u.email, u.phone].filter(Boolean).join(' · ') : 'unknown user') });
+    }
+    var actions = null;
+    if (canEdit || (state.isAdmin && ctx === 'admin')) {
+      actions = el('div', { class: 'actions' },
+        state.isAdmin && d.approval !== 'approved' && el('button', { class: 'btn btn-sign', type: 'button', onclick: function () { setApproval(id, 'approved'); } }, 'Approve'),
+        state.isAdmin && d.approval !== 'rejected' && el('button', { class: 'btn btn-danger', type: 'button', onclick: function () { setApproval(id, 'rejected'); } }, d.approval === 'approved' ? 'Unpublish' : 'Reject'),
+        el('button', { class: 'btn btn-quiet', type: 'button', onclick: function () { openForm(l); } }, 'Edit'),
+        el('button', { class: 'btn btn-quiet', type: 'button', onclick: function () { setStatus(id, taken ? 'open' : 'taken'); } }, taken ? 'Make available again' : 'Mark as rented or sold'),
+        state.ui.confirmDelete === id
+          ? [el('button', { class: 'btn btn-danger', type: 'button', onclick: function () { removeListing(l); } }, 'Yes, delete'),
+             el('button', { class: 'btn btn-quiet', type: 'button', onclick: function () { state.ui.confirmDelete = null; render(); } }, 'Keep')]
+          : el('button', { class: 'btn btn-danger', type: 'button', onclick: function () { state.ui.confirmDelete = id; render(); } }, 'Delete'));
+    }
+    var pcls = photos.length >= 2 ? ' ' + ({ 2: 'two', 3: 'three', 4: 'four' }[photos.length] || 'four') : '';
+    return el('article', { class: 'card' + (taken ? ' is-taken' : '') },
+      photos.length > 0 && el('div', { class: 'photos' + pcls },
+        photos.map(function (p, i) { return el('img', { src: p, alt: 'Photo ' + (i + 1) + ' of ' + (d.building || 'the space'), loading: 'lazy' }); })),
+      el('div', { class: 'card-body' },
+        tags,
+        el('h2', { text: d.building || 'Space in Nairobi' }),
+        el('div', { class: 'prices' + (transfer ? '' : ' one') },
+          transfer && el('div', { class: 'price' }, el('b', { text: Number.isFinite(Number(d.fee)) ? money(d.fee) : '-' }), el('span', { text: 'Transfer fee' })),
+          el('div', { class: 'price' }, el('b', { text: Number.isFinite(Number(d.rent)) ? money(d.rent) : '-' }), el('span', { text: PRICE_LABEL[d.ltype] || 'Rent per month' }))),
+        facts,
+        d.notes && el('p', { class: 'notes', text: d.notes }),
+        d.warning && el('p', { class: 'warning', text: d.warning }),
+        el('p', { class: 'age' + (days >= 45 && !taken ? ' stale' : ''), text: ageText(days) + (days >= 45 && !taken && ctx === 'browse' ? '. Ask if it is still available.' : '') }),
+        contact, owner, actions));
+  }
+
+  function notice(title, body, action) {
+    return el('div', { class: 'notice' }, el('h2', { text: title }), body && el('p', { text: body }), action);
+  }
+  function tabButton(label, pressed, fn) { return el('button', { class: 'tab', type: 'button', 'aria-pressed': String(pressed), onclick: fn }, label); }
+
+  /* ---------- render ---------- */
+  function renderChrome() {
+    var u = state.user;
+    $('openPost').hidden = !canPost();
+    $('btnSignup').hidden = !!u; $('btnLogin').hidden = !!u; $('signOut').hidden = !u;
+    var an = $('adminNote');
+    an.hidden = !u;
+    an.textContent = !u ? '' : (state.isAdmin ? 'You are logged in as the Nafasi owner.' :
+      (state.profile && state.profile.suspended ? 'Your account is suspended. You cannot post. Contact Nafasi.' : 'Logged in as ' + ((state.profile && state.profile.full_name) || u.email) + '.'));
+    var tabs = $('viewTabs'); tabs.replaceChildren(); tabs.hidden = !u;
+    if (u) {
+      tabs.append(tabButton('Browse', state.view === 'browse', function () { setView('browse'); }));
+      tabs.append(tabButton('My listings (' + mine().length + ')', state.view === 'mine', function () { setView('mine'); }));
+      if (state.isAdmin) tabs.append(tabButton('Admin' + (pendingCount() ? ' (' + pendingCount() + ' waiting)' : ''), state.view === 'admin', function () { setView('admin'); }));
+    }
+    $('tools').hidden = state.view !== 'browse';
+    $('takenWrap').hidden = !state.isAdmin;
+  }
+  function renderBrowse(list) {
+    var rows = visible();
+    var open = state.rows.filter(function (l) { return l.data.approval === 'approved' && l.data.status !== 'taken'; });
+    var f = state.filters, filtered = f.q || f.type !== 'all' || f.ltype !== 'all' || f.maxRent || f.beds !== 'all';
+    $('count').textContent = rows.length + (rows.length === 1 ? ' space' : ' spaces') + (filtered ? ' match, of ' + open.length + ' open' : ' open');
+    if (!open.length && !state.rows.some(function (l) { return l.data.approval === 'approved'; })) {
+      list.append(notice('No vacancies yet', 'New vacancies will appear here as soon as they are approved.',
+        canPost() ? el('button', { class: 'btn btn-sign', type: 'button', onclick: function () { openForm(null); } }, 'Post the first vacancy') : null));
+      return;
+    }
+    if (!rows.length) {
+      list.append(notice('No spaces match', 'Try a different search, or remove the price limit.',
+        el('button', { class: 'btn', type: 'button', onclick: clearFilters }, 'Clear filters')));
+      return;
+    }
+    rows.forEach(function (l) { list.append(card(l, 'browse')); });
+  }
+  function renderMine(list) {
+    var rows = sortRows(mine(), 'new');
+    list.append(el('div', { class: 'section-head' }, el('p', { text: rows.length + (rows.length === 1 ? ' listing' : ' listings') + ' posted by you' }),
+      canPost() && el('button', { class: 'btn btn-sign', type: 'button', onclick: function () { openForm(null); } }, 'Post a vacancy')));
+    if (!rows.length) { list.append(notice('You have not posted anything yet', 'Tap Post a vacancy. Your listing goes live after Nafasi approves it.')); return; }
+    rows.forEach(function (l) { list.append(card(l, 'mine')); });
+  }
+  function renderAdmin(list) {
+    var counts = { pending: 0, approved: 0, rejected: 0 };
+    state.rows.forEach(function (l) { if (counts[l.data.approval] !== undefined) counts[l.data.approval]++; });
+    var sub = el('nav', { class: 'tabs sub', 'aria-label': 'Admin sections' },
+      ['pending', 'approved', 'rejected', 'users'].map(function (k) {
+        var label = { pending: 'Pending', approved: 'Approved', rejected: 'Rejected', users: 'Users' }[k];
+        var n = k === 'users' ? state.users.length : counts[k];
+        return tabButton(label + ' (' + n + ')', state.adminTab === k, function () { state.adminTab = k; render(); });
+      }));
+    list.append(sub);
+    if (state.adminTab === 'users') {
+      if (!state.users.length) { list.append(notice('No users yet', '')); return; }
+      state.users.slice().sort(function (a, b) { return String(b.created_at).localeCompare(String(a.created_at)); }).forEach(function (u) {
+        var n = state.rows.filter(function (l) { return l.data.ownerId === u.id; }).length;
+        var self = state.user && u.id === state.user.id;
+        list.append(el('div', { class: 'urow' },
+          el('b', { text: (u.full_name || 'No name') + (self ? ' (you)' : '') }),
+          el('span', { class: 'sub', text: [u.email, u.phone].filter(Boolean).join(' · ') }),
+          el('span', { class: 'sub', text: n + (n === 1 ? ' listing' : ' listings') + ' · joined ' + String(u.created_at).slice(0, 10) + (u.suspended ? ' · SUSPENDED' : '') }),
+          !self && el('div', { class: 'actions' }, el('button', { class: u.suspended ? 'btn btn-quiet' : 'btn btn-danger', type: 'button', onclick: function () { setSuspended(u, !u.suspended); } }, u.suspended ? 'Reinstate user' : 'Suspend user'))));
+      });
+      return;
+    }
+    var rows = sortRows(state.rows.filter(function (l) { return l.data.approval === state.adminTab; }), 'new');
+    if (!rows.length) { list.append(notice('Nothing here', state.adminTab === 'pending' ? 'No listings are waiting for approval.' : 'No ' + state.adminTab + ' listings.')); return; }
+    rows.forEach(function (l) { list.append(card(l, 'admin')); });
+  }
+  function render() {
+    renderChrome();
+    var list = $('list'); list.replaceChildren();
+    if (state.failed) { $('count').textContent = ''; list.append(notice('The vacancies did not load', 'Check your connection and reload the page.')); return; }
+    if (!state.loaded) { $('count').textContent = ''; list.append(notice('Loading vacancies', '')); return; }
+    if (state.view === 'mine' && state.user) renderMine(list);
+    else if (state.view === 'admin' && state.isAdmin) renderAdmin(list);
+    else renderBrowse(list);
+  }
+  function setView(v) { state.view = v; state.ui.confirmDelete = null; render(); window.scrollTo(0, 0); }
+  function syncChips() {
+    Array.prototype.forEach.call($('chips').children, function (c) {
+      c.setAttribute('aria-pressed', String(c.getAttribute('data-type') === state.filters.type));
+    });
+  }
+  function clearFilters() {
+    var f = state.filters; f.q = ''; f.type = 'all'; f.ltype = 'all'; f.maxRent = ''; f.beds = 'all';
+    $('fbeds').value = 'all'; $('flist').value = 'all'; $('q').value = ''; $('maxRent').value = '';
+    syncChips(); render();
+  }
+
+  /* ---------- data ---------- */
+  async function load() {
+    try {
+      var r = await sb.from(TABLE).select('*').order('created_at', { ascending: false }).limit(1000);
+      if (r.error) throw r.error;
+      state.rows = (r.data || []).map(rowToDoc);
+      if (state.isAdmin) {
+        var u = await sb.from(PROFILES).select('*').order('created_at', { ascending: false }).limit(1000);
+        state.users = u.error ? [] : (u.data || []);
+      }
+      state.loaded = true; state.failed = false;
+    } catch (e) { state.failed = true; }
+    render();
+  }
+  async function setStatus(id, status) {
+    var r = await sb.from(TABLE).update({ status: status }).eq('id', id);
+    if (r.error) { toast(errText(r.error)); return; }
+    toast(status === 'taken' ? 'Marked as rented or sold' : 'Available again'); load();
+  }
+  async function setApproval(id, approval) {
+    var r = await sb.from(TABLE).update({ approval: approval }).eq('id', id);
+    if (r.error) { toast(errText(r.error)); return; }
+    toast(approval === 'approved' ? 'Approved. It is public now.' : 'Not approved. It is hidden from the public.'); load();
+  }
+  async function setSuspended(u, flag) {
+    var r = await sb.from(PROFILES).update({ suspended: flag }).eq('id', u.id);
+    if (r.error) { toast(errText(r.error)); return; }
+    toast(flag ? 'User suspended' : 'User reinstated'); load();
+  }
+  async function removeListing(l) {
+    state.ui.confirmDelete = null;
+    var r = await sb.from(TABLE).delete().eq('id', l.id);
+    if (r.error) { toast(errText(r.error)); return; }
+    if (state.isAdmin) {
+      var paths = (l.data.photos || []).map(function (u) { var i = String(u).indexOf('/' + BUCKET + '/'); return i === -1 ? null : decodeURIComponent(String(u).slice(i + BUCKET.length + 2).split('?')[0]); }).filter(Boolean);
+      if (paths.length) { try { await sb.storage.from(BUCKET).remove(paths); } catch (e) { /* ignore */ } }
+    }
+    toast('Listing deleted'); load();
+  }
+
+  /* ---------- post form ---------- */
+  function applyType() {
+    var t = $('f-type').value, res = isRes(t), tr = isTransfer(t), lt = $('f-ltype').value;
+    ['beds-wrap', 'baths-wrap', 'floor-wrap', 'warn-wrap'].forEach(function (id) { $(id).hidden = !res; });
+    ['fee-wrap', 'biz-wrap', 'land-wrap', 'docs-wrap'].forEach(function (id) { $(id).hidden = !tr; });
+    $('size-wrap').hidden = res;
+    $('f-rent-label').textContent = lt === 'sale' ? 'Selling price (KES)' : (lt === 'lease' ? 'Lease price (KES)' : 'Monthly rent (KES)');
+  }
+  function renderPreviews() {
+    var box = $('photoPrev'); box.replaceChildren();
+    state.form.existing.forEach(function (u, i) {
+      box.append(el('div', {}, el('img', { src: u, alt: 'Photo ' + (i + 1) }),
+        el('button', { class: 'btn btn-quiet', type: 'button', onclick: function () { state.form.existing.splice(i, 1); renderPreviews(); } }, 'Remove')));
+    });
+    state.form.added.forEach(function (a, i) {
+      box.append(el('div', {}, el('img', { src: a.url, alt: 'New photo ' + (i + 1) }),
+        el('button', { class: 'btn btn-quiet', type: 'button', onclick: function () { URL.revokeObjectURL(a.url); state.form.added.splice(i, 1); renderPreviews(); } }, 'Remove')));
+    });
+  }
+  function openForm(l) {
+    if (!canPost()) { toast('Your account cannot post right now.'); return; }
+    var d = l ? l.data : null;
+    $('authPanel').hidden = true;
+    $('postForm').reset();
+    state.form = { editId: l ? l.id : null, existing: [], added: [] };
+    $('postTitle').textContent = l ? 'Edit vacancy' : 'Post a vacancy';
+    $('f-submit').textContent = l ? 'Save changes' : (state.isAdmin ? 'Post vacancy' : 'Submit for approval');
+    $('approveNote').hidden = state.isAdmin;
+    $('approveNote').textContent = l && !state.isAdmin
+      ? 'After you save, Nafasi checks the changes again before the listing shows publicly.'
+      : 'Nafasi checks every new listing before it goes public. This usually takes a short while.';
+    $('f-type').value = d ? (TYPES.indexOf(d.type) !== -1 ? d.type : (isRes(d.type) ? 'Apartment/Flat' : 'Other')) : 'Apartment/Flat';
+    $('f-ltype').value = d ? (d.ltype || 'rent') : 'rent';
+    applyType();
+    if (d) {
+      $('f-building').value = d.building || '';
+      $('f-beds').value = bedsLabelFor(d) || 'Bedsitter';
+      $('f-baths').value = d.baths || '';
+      $('f-floor').value = d.floorText || d.floor || '';
+      $('f-rent').value = d.rent != null ? Number(d.rent).toLocaleString('en-KE') : '';
+      $('f-fee').value = d.fee != null ? Number(d.fee).toLocaleString('en-KE') : '';
+      $('f-size').value = d.size || ''; $('f-business').value = d.business || '';
+      $('f-landlord').value = d.landlord === 'agreed' ? 'agreed' : 'notasked'; $('f-docs').checked = !!d.docs;
+      $('f-notes').value = d.notes || ''; $('f-name').value = d.seller || '';
+      $('f-phone').value = d.phone ? showPhone(d.phone) : '';
+      $('f-wa').value = d.whatsapp && normPhone(d.whatsapp) ? showPhone(normPhone(d.whatsapp)) : '';
+      $('f-warn').checked = !!d.warning;
+      state.form.existing = (Array.isArray(d.photos) ? d.photos : []).filter(validPhoto);
+    } else if (state.profile) {
+      $('f-name').value = state.profile.full_name || '';
+      var pp = normPhone(state.profile.phone); $('f-phone').value = pp ? showPhone(pp) : '';
+    }
+    $('formError').textContent = ''; renderPreviews();
+    $('postPanel').hidden = false; $('postPanel').scrollIntoView({ block: 'start' }); $('f-building').focus();
+  }
+  function closeForm() {
+    state.form.added.forEach(function (a) { URL.revokeObjectURL(a.url); });
+    state.form = { editId: null, existing: [], added: [] }; $('postPanel').hidden = true;
+  }
+  function compress(file, side, quality) {
+    return new Promise(function (resolve, reject) {
+      var url = URL.createObjectURL(file), img = new Image();
+      img.onload = function () {
+        URL.revokeObjectURL(url);
+        var s = Math.min(1, side / Math.max(img.width, img.height));
+        var c = document.createElement('canvas');
+        c.width = Math.max(1, Math.round(img.width * s)); c.height = Math.max(1, Math.round(img.height * s));
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        c.toBlob(function (b) { b ? resolve(b) : reject(new Error('unreadable')); }, 'image/jpeg', quality);
+      };
+      img.onerror = function () { URL.revokeObjectURL(url); reject(new Error('unreadable')); };
+      img.src = url;
+    });
+  }
+  async function addPhotos(files) {
+    var err = $('formError'); err.textContent = '';
+    var room = MAX_PHOTOS - state.form.existing.length - state.form.added.length;
+    if (room <= 0) { err.textContent = 'You can add up to ' + MAX_PHOTOS + ' photos.'; return; }
+    var list = Array.prototype.slice.call(files, 0, room);
+    for (var i = 0; i < list.length; i++) {
+      try {
+        var blob = await compress(list[i], 1100, 0.78);
+        state.form.added.push({ blob: blob, url: URL.createObjectURL(blob) });
+      } catch (e) { err.textContent = 'One of those files could not be read as a photo.'; }
+    }
+    renderPreviews();
+  }
+  function readForm() {
+    var type = $('f-type').value, res = isRes(type), tr = isTransfer(type), bl = $('f-beds').value, fl = $('f-floor').value.trim();
+    var waRaw = $('f-wa').value.trim();
+    return {
+      type: type, res: res, tr: tr, building: $('f-building').value.trim(), ltype: $('f-ltype').value,
+      beds_text: res ? bl : '', beds: res ? bedsCategory(bl) : '', bathrooms: res ? $('f-baths').value : '',
+      floor_text: res ? fl : '', floor: res ? floorCategory(fl) : '',
+      rent: parseMoney($('f-rent').value), fee: tr ? parseMoney($('f-fee').value) : 0,
+      size: res ? '' : $('f-size').value.trim(), business: tr ? $('f-business').value.trim() : '',
+      landlord: tr ? $('f-landlord').value : 'notasked', docs: tr ? $('f-docs').checked : false,
+      notes: $('f-notes').value.trim(), seller: $('f-name').value.trim(), phone: normPhone($('f-phone').value),
+      waRaw: waRaw, whatsapp: waRaw ? normPhone(waRaw) : '',
+      warning: res && $('f-warn').checked ? WARNING : ''
+    };
+  }
+  function problem(v) {
+    if (!v.building) return { id: 'f-building', msg: 'Enter the property name and location.' };
+    if (v.rent === null || v.rent <= 0) return { id: 'f-rent', msg: 'Enter the price.' };
+    if (v.tr && v.fee === null) return { id: 'f-fee', msg: 'Enter the transfer fee. Use 0 if there is none.' };
+    if (!v.seller) return { id: 'f-name', msg: 'Enter the contact name.' };
+    if (!v.phone) return { id: 'f-phone', msg: 'Enter a Kenyan mobile number, like 0712 345 678.' };
+    if (v.waRaw && !v.whatsapp) return { id: 'f-wa', msg: 'The WhatsApp number is not valid. Leave it empty if it is the same as the phone number.' };
+    return null;
+  }
+  async function uploadBlob(blob, name) {
+    var up = await sb.storage.from(BUCKET).upload(name, blob, { contentType: 'image/jpeg', cacheControl: '31536000', upsert: false });
+    if (up.error) throw up.error;
+    return sb.storage.from(BUCKET).getPublicUrl(name).data.publicUrl;
+  }
+  async function submit(ev) {
+    ev.preventDefault();
+    var err = $('formError'); err.textContent = '';
+    var v = readForm(), p = problem(v);
+    if (p) { err.textContent = p.msg; $(p.id).focus(); return; }
+    var btn = $('f-submit'), label = btn.textContent; btn.disabled = true; btn.textContent = 'Saving';
+    try {
+      var urls = state.form.existing.slice();
+      for (var i = 0; i < state.form.added.length; i++) {
+        urls.push(await uploadBlob(state.form.added[i].blob, 'p/' + state.user.id + '/' + Date.now() + '-' + Math.random().toString(36).slice(2, 8) + '.jpg'));
+      }
+      var row = {
+        type: v.type, listing_type: v.ltype, beds: v.beds, beds_text: v.beds_text, bathrooms: v.bathrooms, floor: v.floor, floor_text: v.floor_text,
+        building: v.building, size: v.size, business: v.business, fee: v.fee || 0, rent: v.rent,
+        landlord: v.landlord, docs: v.docs, notes: v.notes, warning: v.warning, seller: v.seller, phone: v.phone, whatsapp: v.whatsapp || '', photos: urls
+      };
+      var edited = !!state.form.editId;
+      var res = edited
+        ? await sb.from(TABLE).update(row).eq('id', state.form.editId)
+        : await sb.from(TABLE).insert(Object.assign({ status: 'open', owner_id: state.user.id, approval: state.isAdmin ? 'approved' : 'pending' }, row));
+      if (res.error) throw res.error;
+      closeForm();
+      if (state.isAdmin) toast(edited ? 'Changes saved.' : 'Posted. It is live now.');
+      else { toast(edited ? 'Saved. Nafasi will check the changes before it shows publicly.' : 'Submitted. It will show publicly after Nafasi approves it.'); state.view = 'mine'; }
+      load();
+    } catch (e) { err.textContent = errText(e); }
+    finally { btn.disabled = false; btn.textContent = label; }
+  }
+
+  /* ---------- accounts ---------- */
+  var AUTH = {
+    login: { title: 'Log in', intro: 'Use the email and password you signed up with.', submit: 'Log in', pass: 'Password', passAuto: 'current-password' },
+    signup: { title: 'Create your account', intro: 'Free. Sign up once, then post and manage your vacancies from any phone.', submit: 'Create account', pass: 'Choose a password', passAuto: 'new-password' },
+    forgot: { title: 'Reset your password', intro: 'Enter your email. We will send you a link to set a new password.', submit: 'Send reset link', pass: '', passAuto: '' },
+    magic: { title: 'Email me a login link', intro: 'We email you a link. Open it on this phone and you are logged in, no password needed.', submit: 'Send login link', pass: '', passAuto: '' },
+    recover: { title: 'Set a new password', intro: 'Choose a new password for your account.', submit: 'Save password', pass: 'New password', passAuto: 'new-password' }
+  };
+  function openAuth(mode) {
+    state.authMode = mode; var c = AUTH[mode];
+    $('postPanel').hidden = true;
+    $('authTitle').textContent = c.title; $('authIntro').textContent = c.intro; $('a-submit').textContent = c.submit;
+    $('a-name-wrap').hidden = mode !== 'signup'; $('a-phone-wrap').hidden = mode !== 'signup';
+    $('a-email-wrap').hidden = mode === 'recover';
+    $('a-pass-wrap').hidden = !c.pass; $('a-pass-label').textContent = c.pass; $('a-pass').setAttribute('autocomplete', c.passAuto || 'off');
+    $('a-pass-hint').hidden = !(mode === 'signup' || mode === 'recover');
+    $('a-to-signup').hidden = mode !== 'login'; $('a-to-login').hidden = mode === 'login' || mode === 'recover';
+    $('a-to-forgot').hidden = mode !== 'login'; $('a-to-magic').hidden = mode !== 'login';
+    $('a-cancel').hidden = mode === 'recover';
+    $('authMsg').className = 'form-error'; $('authMsg').textContent = '';
+    $('authPanel').hidden = false; $('authPanel').scrollIntoView({ block: 'start' });
+    var first = mode === 'signup' ? 'a-name' : (mode === 'recover' ? 'a-pass' : 'a-email'); $(first).focus();
+  }
+  function authMsg(text, ok) { var m = $('authMsg'); m.className = ok ? 'ok-note' : 'form-error'; m.textContent = text; }
+  async function authSubmit(ev) {
+    ev.preventDefault();
+    var mode = state.authMode, email = $('a-email').value.trim(), pass = $('a-pass').value;
+    authMsg('');
+    if (mode !== 'recover' && !/^\S+@\S+\.\S+$/.test(email)) { authMsg('Enter a valid email address.'); $('a-email').focus(); return; }
+    var btn = $('a-submit'); btn.disabled = true;
+    try {
+      var redirect = location.origin + location.pathname, r;
+      if (mode === 'login') {
+        if (!pass) { authMsg('Enter your password.'); return; }
+        r = await sb.auth.signInWithPassword({ email: email, password: pass });
+        if (r.error) { authMsg(/invalid login/i.test(r.error.message || '') ? 'Wrong email or password. If you forgot it, tap Forgot password.' : errText(r.error)); return; }
+        $('authPanel').hidden = true; $('a-pass').value = ''; toast('Logged in');
+      } else if (mode === 'signup') {
+        var name = $('a-name').value.trim(), phone = normPhone($('a-phone').value);
+        if (name.length < 2) { authMsg('Enter your name.'); $('a-name').focus(); return; }
+        if (!phone) { authMsg('Enter a Kenyan mobile number, like 0712 345 678.'); $('a-phone').focus(); return; }
+        if (pass.length < 8) { authMsg('The password must be at least 8 characters.'); $('a-pass').focus(); return; }
+        r = await sb.auth.signUp({ email: email, password: pass, options: { data: { full_name: name, phone: phone }, emailRedirectTo: redirect } });
+        if (r.error) { authMsg(/registered|already/i.test(r.error.message || '') ? 'That email already has an account. Tap "I already have an account".' : errText(r.error)); return; }
+        if (r.data && r.data.user && r.data.user.identities && r.data.user.identities.length === 0) { authMsg('That email already has an account. Tap "I already have an account".'); return; }
+        if (r.data && r.data.session) { $('authPanel').hidden = true; $('a-pass').value = ''; toast('Account created. You can post now.'); }
+        else authMsg('Account created. Check your email and tap the confirmation link, then log in.', true);
+      } else if (mode === 'forgot') {
+        r = await sb.auth.resetPasswordForEmail(email, { redirectTo: redirect });
+        if (r.error) { authMsg(errText(r.error)); return; }
+        authMsg('If that email has an account, a reset link is on its way. Open it on this phone.', true);
+      } else if (mode === 'magic') {
+        r = await sb.auth.signInWithOtp({ email: email, options: { emailRedirectTo: redirect, shouldCreateUser: false } });
+        if (r.error) { authMsg(errText(r.error)); return; }
+        authMsg('Link sent. Open your email on this phone and tap the link.', true);
+      } else if (mode === 'recover') {
+        if (pass.length < 8) { authMsg('The password must be at least 8 characters.'); return; }
+        r = await sb.auth.updateUser({ password: pass });
+        if (r.error) { authMsg(errText(r.error)); return; }
+        $('authPanel').hidden = true; $('a-pass').value = ''; toast('Password saved. You are logged in.');
+      }
+    } finally { btn.disabled = false; }
+  }
+  async function onSession(session, event) {
+    var uid = session && session.user ? session.user.id : null;
+    if (event === 'PASSWORD_RECOVERY') { state.user = session.user; openAuth('recover'); }
+    if (state.ready && event === 'TOKEN_REFRESHED') return;
+    if (state.ready && uid && state.user && state.user.id === uid && event !== 'SIGNED_IN' && event !== 'USER_UPDATED' && event !== 'PASSWORD_RECOVERY') return;
+    if (!uid) {
+      var had = !!state.user;
+      state.user = null; state.profile = null; state.isAdmin = false; state.users = []; state.view = 'browse';
+      state.ready = true;
+      if (had) { $('postPanel').hidden = true; load(); } else render();
+      return;
+    }
+    state.user = session.user; state.profile = null;
+    try {
+      var p = await sb.from(PROFILES).select('*').eq('id', uid).maybeSingle();
+      state.profile = p && p.data ? p.data : null;
+    } catch (e) { state.profile = null; }
+    try { var r = await sb.rpc('nafasi_is_admin'); state.isAdmin = r.data === true; } catch (e) { state.isAdmin = false; }
+    state.ready = true;
+    if (!state.isAdmin && state.view === 'admin') state.view = 'browse';
+    await load();
+  }
+
+  /* ---------- setup ---------- */
+  function buildStatic() {
+    TYPES.forEach(function (t) { $('f-type').append(el('option', { value: t, text: t })); });
+    BEDS.forEach(function (b) { $('f-beds').append(el('option', { value: b[0], text: b[0] })); });
+    BATHS.forEach(function (b) { $('f-baths').append(el('option', { value: b, text: b === '' ? 'Not stated' : b })); });
+    BEDFILTER.forEach(function (b) { $('fbeds').append(el('option', { value: b[0], text: b[1] })); });
+    CHIPS.forEach(function (c) {
+      $('chips').append(el('button', {
+        class: 'chip', type: 'button', 'data-type': c[0], 'aria-pressed': 'false',
+        onclick: function () { state.filters.type = c[0]; syncChips(); render(); }
+      }, c[1]));
+    });
+    syncChips();
+    $('f-type').addEventListener('change', applyType);
+    $('f-ltype').addEventListener('change', applyType);
+    $('fbeds').addEventListener('change', function (e) { state.filters.beds = e.target.value; render(); });
+    $('flist').addEventListener('change', function (e) { state.filters.ltype = e.target.value; render(); });
+    $('q').addEventListener('input', function (e) { state.filters.q = e.target.value; render(); });
+    $('maxRent').addEventListener('input', function (e) { state.filters.maxRent = e.target.value; render(); });
+    $('sort').addEventListener('change', function (e) { state.filters.sort = e.target.value; render(); });
+    $('showTaken').addEventListener('change', function (e) { state.filters.showTaken = e.target.checked; render(); });
+    $('openPost').addEventListener('click', function () { openForm(null); });
+    $('f-cancel').addEventListener('click', closeForm);
+    $('postForm').addEventListener('submit', submit);
+    $('f-photos').addEventListener('change', function (e) { var f = e.target.files; addPhotos(f).then(function () { e.target.value = ''; }); });
+    $('btnSignup').addEventListener('click', function () { openAuth('signup'); });
+    $('btnLogin').addEventListener('click', function () { openAuth('login'); });
+    $('a-to-signup').addEventListener('click', function () { openAuth('signup'); });
+    $('a-to-login').addEventListener('click', function () { openAuth('login'); });
+    $('a-to-forgot').addEventListener('click', function () { openAuth('forgot'); });
+    $('a-to-magic').addEventListener('click', function () { openAuth('magic'); });
+    $('a-cancel').addEventListener('click', function () { $('authPanel').hidden = true; });
+    $('authForm').addEventListener('submit', authSubmit);
+    $('signOut').addEventListener('click', async function () { await sb.auth.signOut(); toast('Logged out'); });
+    applyType();
+  }
+  async function boot() {
+    buildStatic(); render();
+    if (!window.supabase || !window.supabase.createClient) { state.failed = true; render(); return; }
+    sb = window.supabase.createClient(CFG.url, CFG.key, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } });
+    sb.auth.onAuthStateChange(function (ev, session) { setTimeout(function () { onSession(session, ev); }, 0); });
+    await load();
+  }
+  boot();
+})();
+</script>
+</body>
+</html>
